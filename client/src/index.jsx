@@ -19,16 +19,17 @@ class App extends React.Component {
     // whats missing?
     this.swapFavorites = this.swapFavorites.bind(this)
     this.getMovies = this.getMovies.bind(this)
+    this.saveMovie = this.saveMovie.bind(this)
   }
 
   getMovies(genre) {
     Axios.get('/search', {params: {genre: genre}})
         .then(resp => {
-          console.log('resp FROM APP GET MOVIES IS', resp)
+          // console.log('resp FROM APP GET MOVIES IS', resp)
           this.setState({
             movies: resp.data.results
           }, () => {
-            console.log('this.state.movies is now', this.state.movies)
+            // console.log('this.state.movies is now', this.state.movies)
           })
         })
         .catch(err => console.log('err getting:', err))
@@ -36,6 +37,11 @@ class App extends React.Component {
 
   saveMovie() {
     //same as above but do something diff
+    alert('trying to save movie!');
+    console.log('trying to save movie', this.state.movies[0])
+    Axios.post('/save', this.state.movies[0])
+      .then(resp => console.log('resp from saving is', resp))
+      .catch(err => console.log('error trying to save movie', err))
   }
 
   deleteMovie() {
@@ -60,7 +66,8 @@ class App extends React.Component {
       
       <div className="main">
         <Search swapFavorites={this.swapFavorites} showFaves={this.state.showFaves} searchGenre={this.getMovies}/>
-        <Movies movies={this.state.showFaves ? this.state.favorites : this.state.movies} showFaves={this.state.showFaves}/>
+        <Movies movies={this.state.showFaves ? this.state.favorites : this.state.movies} showFaves={this.state.showFaves}
+        saveFave={this.state.saveMovie}/>
       </div>
     </div>)
   }

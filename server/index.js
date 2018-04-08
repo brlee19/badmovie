@@ -4,16 +4,14 @@ var request = require('request')
 var app = express();
 const config = require('./config.js');
 const axios = require('axios');
+const db = require('./database.js');
 
 app.use(express.static(__dirname + '/../client/dist'));
 app.use(bodyParser.json());
 
 // Due to express, when you load the page, it doesnt make a get request to '/', it simply serves up the dist folder
 app.get('/search', function(req, res) {
-  // console.log('req is', req);
-  // console.log(req.genre);
-  // let genreId = '99';
-  console.log('request is', req);
+  // console.log('request is', req);
   const movieDB = 'https://api.themoviedb.org/3/discover/movie'
   let params = {
     api_key: config.API_KEY,
@@ -50,8 +48,26 @@ app.get('/genres', function(req, res) {
     })
 })
 
-app.post('/save', function(req, res) {
+app.get('/faves', (req, res) => {
+  db.getAllFavorites((err, results,fields) => {
+    if (err) {
+      console.log(err);
+      res.send('Sorry server error');
+    }
+    res.send(results);
+  });
+});
 
+app.post('/save', function(req, res) {
+  //extract movie obj
+  console.log('/save post request is', req);
+  db.saveFavorite(movieObj, (err, results, fields) => {
+    if (err) {
+      console.log(err);
+      res.send('Sorry, server error');
+    }
+    res.send(results);
+  });
 })
 
 app.post('/delete', function(req, res) {

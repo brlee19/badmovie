@@ -1,19 +1,35 @@
 const mysql = require('mysql');
 const mysqlConfig = require('./config.js');
 
-const connection = mysql.createConnection(mysqlConfig);
+const connection = mysql.createConnection({
+  host: mysqlConfig.host,
+  user: mysqlConfig.user,
+  password: mysqlConfig.password,
+  database: mysqlConfig.database
+});
+
+connection.connect();
 
 const getAllFavorites = function(callback) {
-  //get favorites from the database
+  connection.query('SELECT * FROM FAVES', function(err, results, fields) {
+    // console.log('results from fave query', results);
+    callback(err, results, fields);
+  });
 };
-const saveFavorite = function(callback) {
+const saveFavorite = function(params, callback) {
+  let queryStr = 'insert into faves(id, poster_path, title, overview, release_date, vote_average, vote_count)\
+  values(?, ?, ?, ?, ?, ?, ?)'
+  connection.query(queryStr, params, (err, results, fields) => {
+    callback(err, results, fields);
+  });
   //get favorites from the database
 };
 const deleteFavorite = function(callback) {
   //get favorites from the database
 };
 module.exports = {
-  getAllFavorites,
-  saveFavorite,
-  deleteFavorite
+  connection: connection,
+  getAllFavorites: getAllFavorites,
+  saveFavorite: saveFavorite,
+  deleteFavorite: deleteFavorite
 };

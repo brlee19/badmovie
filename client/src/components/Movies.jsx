@@ -3,7 +3,11 @@ import React from 'react';
 class Movies extends React.Component {
   constructor(props) {
     super(props)
+    this.testFn = this.testFn.bind(this)
+  }
 
+  testFn() {
+    alert('test!');
   }
 //
 
@@ -18,12 +22,12 @@ class Movies extends React.Component {
 
 //
   render() {
-    if (!this.props.movies.length) return (<div></div>)
+
     return (
         <ul className="movies">
         {console.log(this.props.movies)}
         {this.props.movies.map(movie => (
-          <li className="movie_item">
+          <li className="movie_item" onClick={this.props.saveFave}>
           <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}/>
           <div className="movie_description">
             <h2>{movie.original_title}</h2>

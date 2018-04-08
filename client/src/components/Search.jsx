@@ -28,9 +28,6 @@ class Search extends React.Component {
   }
 
   search() {
-    // Axios.get('/search', {params: {genre: this.state.selectedGenre}})
-    //   .then(resp => console.log('resp is', resp))
-    //   .catch(err => console.log('err searching:', err))
     this.props.searchGenre(this.state.selectedGenre);
   }
 
