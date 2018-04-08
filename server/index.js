@@ -2,9 +2,11 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request')
 var app = express();
+const config = require('./config.js');
+const axios = require('axios');
 
 app.use(express.static(__dirname + '/../client/dist'));
-// app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 // Due to express, when you load the page, it doesnt make a get request to '/', it simply serves up the dist folder
 app.get('/search', function(req, res) {
@@ -17,6 +19,22 @@ app.get('/search', function(req, res) {
     //https://developers.themoviedb.org/3/discover/movie-discover
 
     //and sort them by horrible votes using the search parameters in the API
+  const movieDB = 'https://api.themoviedb.org/3/discover/movie'
+  let params = {
+    api_key: config.API_KEY,
+    sort_by: 'popularity.desc'
+  };
+  axios.get(movieDB, {
+    params: params
+  })
+    .then((resp) => {
+      console.log('resp is', resp.data);
+      res.send(resp.data);
+    })
+    .catch((err) => {
+      console.log('error is', err);
+      res.send(err);
+    })
 })
 
 app.get('/genres', function(req, res) {
