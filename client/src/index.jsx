@@ -18,14 +18,20 @@ class App extends React.Component {
     this.getMovies = this.getMovies.bind(this)
     // whats missing?
     this.swapFavorites = this.swapFavorites.bind(this)
+    this.getMovies = this.getMovies.bind(this)
   }
 
   getMovies(genre) {
-    //make an axios request to your server on the GET SEARCH endpoint
-    const params = {genre: genre}; //genre will be the ID
-    Axios.get('/search', {params: params})
-      .then(resp => console.log('resp is', resp))
-      .catch((err) => console.log('err in getMovies', err))
+    Axios.get('/search', {params: {genre: genre}})
+        .then(resp => {
+          console.log('resp FROM APP GET MOVIES IS', resp)
+          this.setState({
+            movies: resp.data.results
+          }, () => {
+            console.log('this.state.movies is now', this.state.movies)
+          })
+        })
+        .catch(err => console.log('err getting:', err))
   }
 
   saveMovie() {
@@ -53,7 +59,7 @@ class App extends React.Component {
       <header className="navbar"><h1>Bad Movies</h1></header> 
       
       <div className="main">
-        <Search swapFavorites={this.swapFavorites} showFaves={this.state.showFaves}/>
+        <Search swapFavorites={this.swapFavorites} showFaves={this.state.showFaves} searchGenre={this.getMovies}/>
         <Movies movies={this.state.showFaves ? this.state.favorites : this.state.movies} showFaves={this.state.showFaves}/>
       </div>
     </div>)

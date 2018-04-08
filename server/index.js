@@ -10,14 +10,15 @@ app.use(bodyParser.json());
 
 // Due to express, when you load the page, it doesnt make a get request to '/', it simply serves up the dist folder
 app.get('/search', function(req, res) {
-  console.log('req is', req);
+  // console.log('req is', req);
   // console.log(req.genre);
   // let genreId = '99';
+  console.log('request is', req);
   const movieDB = 'https://api.themoviedb.org/3/discover/movie'
   let params = {
     api_key: config.API_KEY,
-    sort_by: 'vote_average.asc'
-    // with_genres: genreId
+    sort_by: 'vote_average.asc',
+    with_genres: req.query.genre
   };
   axios.get(movieDB, {
     params: params
