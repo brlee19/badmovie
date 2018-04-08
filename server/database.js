@@ -9,7 +9,7 @@ const getAllFavorites = function(callback) {
 const saveFavorite = function(callback) {
   //get favorites from the database
 };
-const deleteFavorites = function(callback) {
+const deleteFavorite = function(callback) {
   //get favorites from the database
 };
 module.exports = {
