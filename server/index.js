@@ -49,7 +49,7 @@ app.get('/genres', function(req, res) {
 })
 
 app.get('/faves', (req, res) => {
-  db.getAllFavorites((err, results,fields) => {
+  db.getAllFavorites((err, results, fields) => {
     if (err) {
       console.log(err);
       res.send('Sorry server error');
@@ -60,8 +60,12 @@ app.get('/faves', (req, res) => {
 
 app.post('/save', function(req, res) {
   //extract movie obj
-  console.log('/save post request is', req);
-  db.saveFavorite(movieObj, (err, results, fields) => {
+  // console.log('/save post request is', req);
+  //id, poster_path, title, overview, release_date, vote_average, vote_count
+  const vals = [req.body.id, req.body.poster_path, req.body.title, req.body.overview, req.body.release_date,
+  req.body.vote_average, req.body.vote_count];
+  // console.log('req.body is', req.body.id);
+  db.saveFavorite(vals, (err, results, fields) => {
     if (err) {
       console.log(err);
       res.send('Sorry, server error');
@@ -71,7 +75,14 @@ app.post('/save', function(req, res) {
 })
 
 app.post('/delete', function(req, res) {
-
+  const param = [req.body.id];
+  db.deleteFavorite(param, (err, results, fields) => {
+    if (err) {
+      console.log(err);
+      res.send('Sorry, server error');
+    }
+    res.sendStatus(200);
+  });
 })
 app.listen(3000, function() {
   console.log('listening on port 3000!');

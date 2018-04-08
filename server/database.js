@@ -22,10 +22,13 @@ const saveFavorite = function(params, callback) {
   connection.query(queryStr, params, (err, results, fields) => {
     callback(err, results, fields);
   });
-  //get favorites from the database
 };
-const deleteFavorite = function(callback) {
-  //get favorites from the database
+
+const deleteFavorite = function(params, callback) {
+  let queryStr = 'DELETE FROM faves WHERE id = ?'
+  connection.query(queryStr, params, (err, results, fields) => {
+    callback(err, results, fields);
+  })
 };
 module.exports = {
   connection: connection,

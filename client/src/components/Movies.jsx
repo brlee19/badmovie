@@ -3,11 +3,17 @@ import React from 'react';
 class Movies extends React.Component {
   constructor(props) {
     super(props)
-    this.testFn = this.testFn.bind(this)
+    this.state = {selectedMovie: ''}
+    this.testFn = this.testFn.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   testFn() {
     alert('test!');
+  }
+
+  handleClick(movie) {
+    this.props.deleteFave(movie);
   }
 //
 
@@ -25,9 +31,8 @@ class Movies extends React.Component {
 
     return (
         <ul className="movies">
-        {console.log(this.props.movies)}
         {this.props.movies.map(movie => (
-          <li className="movie_item" onClick={this.props.saveFave}>
+          <li id={movie.id} className="movie_item" onClick={() => {this.handleClick(movie)}}>
           <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}/>
           <div className="movie_description">
             <h2>{movie.original_title}</h2>
