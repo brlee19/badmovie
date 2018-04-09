@@ -10,13 +10,11 @@ class App extends React.Component {
   constructor(props) {
   	super(props)
   	this.state = {
-      movies: [{deway: "movies"}],
-      favorites: [{deway: "favorites"}],
+      movies: [],
+      favorites: [],
       showFaves: false
   	}
-
     this.getMovies = this.getMovies.bind(this)
-    // whats missing?
     this.swapFavorites = this.swapFavorites.bind(this)
     this.getMovies = this.getMovies.bind(this)
     this.saveMovie = this.saveMovie.bind(this)
@@ -26,28 +24,42 @@ class App extends React.Component {
   getMovies(genre) {
     Axios.get('/search', {params: {genre: genre}})
         .then(resp => {
-          // console.log('resp FROM APP GET MOVIES IS', resp)
           this.setState({
             movies: resp.data.results
-          }, () => {
-            // console.log('this.state.movies is now', this.state.movies)
           })
         })
         .catch(err => console.log('err getting:', err))
   }
 
   saveMovie(movie) {
-    console.log('trying to save movie', movie)
+    // console.log('trying to save movie', movie)
     Axios.post('/save', movie)
-      .then(resp => console.log('resp from saving is', resp))
+      .then(resp => {
+        console.log('resp from saving is', resp);
+        this.getFaves();
+      })
       .catch(err => console.log('error trying to save movie', err))
   }
 
   deleteMovie(movie) {
-    console.log('trying to delete movie', movie)
+    // console.log('trying to delete movie', movie)
     Axios.post('/delete', movie)
-      .then(resp => console.log('resp from deleting is', resp))
+      .then(resp => {
+        console.log('resp from deleting is', resp)
+        this.getFaves();
+      })
       .catch(err => console.log('error trying to save movie', err))
+  }
+
+  getFaves() {
+    Axios.get('/faves')
+      .then(resp => {
+        console.log('resp from getting faves is', resp.data);
+        this.setState({
+          favorites: resp.data
+        }, () => console.log('current faves are', this.state.favorites))
+      })
+      .catch(err => console.log('error trying to get faves', err))
   }
 
   swapFavorites() {
@@ -59,6 +71,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.getMovies('12')
+    this.getFaves()
   }
 
   render () {

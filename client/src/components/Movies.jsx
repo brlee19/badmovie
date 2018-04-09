@@ -13,7 +13,11 @@ class Movies extends React.Component {
   }
 
   handleClick(movie) {
-    this.props.deleteFave(movie);
+    if (this.props.showFaves) {
+      console.log(this.props.deleteFave(movie))
+    } else {
+      console.log(this.props.saveFave(movie))
+    }
   }
 //
 
@@ -35,7 +39,7 @@ class Movies extends React.Component {
           <li id={movie.id} className="movie_item" onClick={() => {this.handleClick(movie)}}>
           <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}/>
           <div className="movie_description">
-            <h2>{movie.original_title}</h2>
+            <h2>{movie.original_title || movie.title}</h2>
             <section className="movie_details">
               <div className="movie_year">
                 <span className="title">Year</span>
